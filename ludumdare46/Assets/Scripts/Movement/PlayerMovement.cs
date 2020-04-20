@@ -65,10 +65,13 @@ public class PlayerMovement : MonoBehaviour
 
         currentDirection.y = 0;
 
+       // Debug.Log(canGo);
+
         transform.rotation = Quaternion.Euler(new Vector3(0 , myCamera.Direction.y , 0));
 
         if(!canGo){
             weapon.SetType(0);
+            currentDirection = Vector3.zero;
             return;
         }
         

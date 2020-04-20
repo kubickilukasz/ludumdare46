@@ -20,11 +20,12 @@ public class DeathMenu : Menu
     }
 
     public void RestartGame(){
+        activeWindows = 0;
         SceneManager.LoadScene(0);
     }
 
     void onDeath(){
-        active = true;
+        ChangeActive(true);
         Alert.Call("YOU ARE DEAD!");
         CheckActiveWindow();
     }

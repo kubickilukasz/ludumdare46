@@ -4,13 +4,6 @@ using UnityEngine;
 
 public class StartGame : Menu
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        active = true;
-        CheckActiveWindow();   
-
-    }
 
     float Vtime = 0f;
     float Vtime2 = 0f;
@@ -20,27 +13,30 @@ public class StartGame : Menu
 
     bool called = false;
 
-    
+    void Start()
+    {
+        ChangeActive(true);
+        CheckActiveWindow();   
+
+    }
 
     // Update is called once per frame
     void Update()
-    {
+    {   
 
-
-
-        Vtime += Time.deltaTime;
+        Vtime += Time.unscaledDeltaTime;
 
         if(Vtime > time){
 
-            panelMenu.alpha = (1 - Vtime2 / time2);
+            panelMenu.alpha = (1 - Vtime2 / time2);   
 
-            Vtime2 += Time.deltaTime;
+            Vtime2 += Time.unscaledDeltaTime;
 
             if(Vtime2 > time2 && !called){
 
                 called = true;
 
-                active = false;
+                ChangeActive(false);
                 CheckActiveWindow();
                 Alert.Call("WHERE AM I?");
 

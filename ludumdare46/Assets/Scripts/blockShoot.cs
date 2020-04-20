@@ -9,6 +9,11 @@ public class blockShoot : MonoBehaviour
     static int triggers = 0;
 
     public CanvasGroup canv;
+
+    private void Start()
+    {
+        triggers = 0;
+    }
    
     private void OnTriggerEnter(Collider other)
     {

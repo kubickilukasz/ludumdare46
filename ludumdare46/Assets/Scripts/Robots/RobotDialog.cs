@@ -38,6 +38,8 @@ public class RobotDialog : MonoBehaviour
     bool tempCanShoot;
     bool tempCanGo;
 
+    int statusText = 0;
+
     int line = 0;
 
     string[] lines;
@@ -84,6 +86,12 @@ public class RobotDialog : MonoBehaviour
 
         if(Input.GetButtonDown("Fire1") && coroutine != null){
 
+            if(statusText == 1){
+
+                statusText = 2;
+
+            }else if(statusText == 2){
+
                 StopCoroutine(coroutine);
 
                 coroutine = null;
@@ -96,16 +104,50 @@ public class RobotDialog : MonoBehaviour
 
                 OnEndText();
 
+            }
+
         }
+        
+    }
+
+    public void StopDialog(){
+
+        StopCoroutine(coroutine);
+
+        coroutine = null;
+
+        textObj.text = lines[line - 1];
+
+        audioSource.Stop();
+
+        animator.SetBool("talk" , false);
+
+        line = lines.Length;
+
+         OnEndText();
         
     }
 
     public void StartDialog(){
 
-        if(currentDialog != null || line >= lines.Length){
+        if(line >= lines.Length || currentDialog == this){
             return;
         }
 
+        if(currentDialog != null ){
+
+            if(!(currentDialog.requiredAttention == false && requiredAttention == true)){
+
+                return;
+
+            }else{
+
+                currentDialog.StopDialog();
+
+            }
+
+
+        }
 
         if(requiredAttention){
 
@@ -207,9 +249,11 @@ public class RobotDialog : MonoBehaviour
 
         int i = 0;
 
+        statusText = 1;
+
         while(true){
 
-            if(i < textLength){
+            if(i < textLength && statusText == 1){
 
                 animator.SetBool("talk" , true);
 
@@ -228,24 +272,31 @@ public class RobotDialog : MonoBehaviour
 
             }else{
 
+                textObj.text = nameRobot + ": " + text;
+
                 audioSource.Stop();
 
                 animator.SetBool("talk" , false);
 
-                if(line  >= lines.Length && requiredAttention){
+                statusText = 2;
 
-                    yield return null;
+                //if(line  >= lines.Length && requiredAttention){
 
-                }else{
+                   // yield return null;
+
+                //}else{
+
                     yield return new WaitForSeconds(2f);
-                }
 
+               // }
                 
                 break;
 
             }
       
         }
+
+        statusText = 0;
 
         coroutine = null;
 

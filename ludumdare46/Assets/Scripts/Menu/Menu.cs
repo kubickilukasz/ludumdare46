@@ -8,22 +8,29 @@ public class Menu : MonoBehaviour
     [SerializeField]
     protected CanvasGroup panelMenu;
 
-    protected bool active = false; 
+    private bool active = false; 
     // Start is called before the first frame update
 
     protected bool tempCanShoot = true;
+    protected bool tempCanGo = true;
+
+    protected static int activeWindows = 0;
 
     void Start()
     {
+        //activeWindows = 0;
         CheckActiveWindow();
     }
 
     // Update is called once per frame
     void Update()
     {
+
+        //Debug.Log(activeWindows);
+
         if(Input.GetKeyDown(KeyCode.Escape) && PlayerMovement.instance.isDead == false){
 
-            active = !active;
+            ChangeActive();
             CheckActiveWindow();
 
         }
@@ -33,12 +40,9 @@ public class Menu : MonoBehaviour
 
     protected void CheckActiveWindow(){
 
-    
-
         if(active){
 
             Time.timeScale = 0f;
-            PlayerMovement.instance.canGo = false;
             panelMenu.alpha = 1f;
             panelMenu.interactable = true;
             Cursor.visible = true;
@@ -46,20 +50,27 @@ public class Menu : MonoBehaviour
             panelMenu.blocksRaycasts = true;
 
             tempCanShoot = PlayerMovement.instance.canShoot ;
+            tempCanGo = PlayerMovement.instance.canGo ;
 
             PlayerMovement.instance.canShoot = false;
+            PlayerMovement.instance.canGo = false;
           //  panelMenu.active = true;
 
         }else{
 
-            Time.timeScale = 1;
-             PlayerMovement.instance.canGo = true;
-             panelMenu.blocksRaycasts = false;
-             panelMenu.alpha = 0f;
-             panelMenu.interactable = false;
-              Cursor.visible = false;
-               Cursor.lockState = CursorLockMode.Locked;
-               PlayerMovement.instance.canShoot = tempCanShoot;
+            if(activeWindows == 0){
+
+                Time.timeScale = 1;
+                //PlayerMovement.instance.canGo = true;
+                PlayerMovement.instance.canGo = tempCanGo;
+                panelMenu.blocksRaycasts = false;
+                panelMenu.alpha = 0f;
+                panelMenu.interactable = false;
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+                PlayerMovement.instance.canShoot = tempCanShoot;
+
+            }
            // panelMenu. = true;
         }
 
@@ -72,7 +83,36 @@ public class Menu : MonoBehaviour
     }
 
     public void Resume(){
-        active = false;
+        //active = false;
+        ChangeActive(false);
         CheckActiveWindow();
+    }
+
+    protected void ChangeActive(){
+
+        active = !active;
+
+        if(active){
+            activeWindows++;
+        }else{
+            activeWindows--;
+        }
+
+    }
+
+    protected void ChangeActive(bool newActive){
+
+        if(newActive != active){
+
+            active = newActive;
+
+            if(active){
+                activeWindows++;
+            }else{
+                activeWindows--;
+            }
+
+        }
+
     }
 }

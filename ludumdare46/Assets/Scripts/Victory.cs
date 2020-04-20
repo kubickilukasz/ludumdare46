@@ -19,6 +19,7 @@ public class Victory : Menu
     void Awake()
     {
         instance = this; 
+        fullCondition = false;
         CheckActiveWindow();     
     }
 
@@ -51,7 +52,7 @@ public class Victory : Menu
     }
 
     void ShowVictoryScreen(){
-        active = true;
+        ChangeActive(true);
         CheckActiveWindow();
     }
 }
