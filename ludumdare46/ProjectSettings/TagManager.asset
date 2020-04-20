@@ -13,11 +13,11 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - gun
+  - bullet
+  - player
+  - enemy
+  - invisibleWindow
   - 
   - 
   - 
